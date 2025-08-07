@@ -3,15 +3,25 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 const SECRET_KEY = "your-secret-key";
 const dataPath = path.join(__dirname, 'uploads', 'data.json');
 
-const multer = require('multer');
+// ✅ CORS FIX
+app.use(cors({
+  origin: "https://movieplus01.netlify.app"
+}));
+
+app.use(express.json());
+app.use(express.static('uploads'));
+
+// ✅ Multer config
 const upload = multer({ dest: 'uploads/' }); // Store files in uploads/ folder
 
+// ✅ Upload API
 app.post('/api/upload', upload.fields([{ name: 'poster' }, { name: 'video' }]), (req, res) => {
   try {
     const { title, description, year, rating } = req.body;
@@ -39,11 +49,7 @@ app.post('/api/upload', upload.fields([{ name: 'poster' }, { name: 'video' }]), 
   }
 });
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static('uploads'));
-
-// Helper functions
+// ✅ Helper functions
 function readData() {
   const data = fs.readFileSync(dataPath, 'utf8');
   return JSON.parse(data);
@@ -63,9 +69,11 @@ app.post('/api/login', (req, res) => {
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
+
 app.get('/api/login', (req, res) => {
   res.send("Login API only accepts POST requests 🔐");
 });
+
 // ✅ GET movies
 app.get('/api/movies', (req, res) => {
   try {
