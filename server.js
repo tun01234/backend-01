@@ -9,6 +9,36 @@ const PORT = process.env.PORT || 10000;
 const SECRET_KEY = "your-secret-key";
 const dataPath = path.join(__dirname, 'uploads', 'data.json');
 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Store files in uploads/ folder
+
+app.post('/api/upload', upload.fields([{ name: 'poster' }, { name: 'video' }]), (req, res) => {
+  try {
+    const { title, description, year, rating } = req.body;
+
+    const poster = req.files['poster']?.[0]?.filename;
+    const video = req.files['video']?.[0]?.filename;
+
+    const newMovie = {
+      title,
+      description,
+      year,
+      rating,
+      poster: poster ? `/uploads/${poster}` : '',
+      video: video ? `/uploads/${video}` : ''
+    };
+
+    const movies = readData();
+    movies.push(newMovie);
+    writeData(movies);
+
+    res.status(201).json({ message: "✅ Movie uploaded successfully with files!" });
+  } catch (error) {
+    console.error("Upload error:", error);
+    res.status(500).json({ error: "❌ Failed to upload movie" });
+  }
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static('uploads'));
