@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "title": "Test Movie",
+    "description": "Sample Desc",
+    "year": "2025",
+    "rating": "5",
+    "poster": "/uploads/test.jpg",
+    "video": "/uploads/test.mp4"
+  }
+]
