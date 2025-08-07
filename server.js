@@ -33,7 +33,9 @@ app.post('/api/login', (req, res) => {
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
-
+app.get('/api/login', (req, res) => {
+  res.send("Login API only accepts POST requests 🔐");
+});
 // ✅ GET movies
 app.get('/api/movies', (req, res) => {
   try {
