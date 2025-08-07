@@ -11,12 +11,16 @@ const SECRET_KEY = "your-secret-key";
 const dataPath = path.join(__dirname, 'uploads', 'data.json');
 
 // ✅ CORS FIX
+// Middleware
 app.use(cors({
   origin: "https://movieplus01.netlify.app"
 }));
-
 app.use(express.json());
-app.use(express.static('uploads'));
+app.use(express.urlencoded({ extended: true }));
+
+// ✅ Add this line
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // ✅ Multer config
 const upload = multer({ dest: 'uploads/' }); // Store files in uploads/ folder
