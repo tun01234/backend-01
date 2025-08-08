@@ -75,6 +75,22 @@ app.post('/api/delete', (req, res) => {
     writeData(movies);
     res.json({message:'Deleted'});
 });
+// Edit/Update API (By idx)
+app.post('/api/update', (req, res) => {
+    const { idx, title, description, year, rating } = req.body;
+    const movies = readData();
+    if (typeof idx === 'number' && idx >= 0 && idx < movies.length) {
+        // Only text fields update (poster/video skip for now)
+        movies[idx].title = title;
+        movies[idx].description = description;
+        movies[idx].year = year;
+        movies[idx].rating = rating;
+        writeData(movies);
+        res.json({ message: 'Movie updated' });
+    } else {
+        res.status(400).json({ error: 'Invalid index' });
+    }
+});
 // ✅ Login Route
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
