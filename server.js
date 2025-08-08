@@ -67,7 +67,14 @@ function readData() {
 function writeData(data) {
   fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
 }
-
+// Delete Movie by Index (လွယ်ချင်ရင် index နဲ့)
+app.post('/api/delete', (req, res) => {
+    const { idx } = req.body;
+    let movies = readData();
+    movies.splice(idx, 1);
+    writeData(movies);
+    res.json({message:'Deleted'});
+});
 // ✅ Login Route
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
