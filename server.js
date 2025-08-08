@@ -32,15 +32,20 @@ app.post('/api/upload', upload.fields([{ name: 'poster' }, { name: 'video' }]), 
 
     const poster = req.files['poster']?.[0]?.filename;
     const video = req.files['video']?.[0]?.filename;
-const BASE_URL = "https://backend-01-2tke.onrender.com"; // 👈 render backend URL
-    const newMovie = {
-      title,
-      description,
-      year,
-      rating,
-      poster: poster ? `${BASE_URL}/uploads/${poster}` : '',
+
+    console.log("🎥 Saved video filename:", video); // ✅ Now works correctly
+    
+const BASE_URL = "https://backend-01-2tke.onrender.com";
+
+const newMovie = {
+  title,
+  description,
+  year,
+  rating,
+  poster: poster ? `${BASE_URL}/uploads/${poster}` : '',
   video: video ? `${BASE_URL}/uploads/${video}` : ''
-    };
+};
+
 
     const movies = readData();
     movies.push(newMovie);
