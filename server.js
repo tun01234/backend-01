@@ -85,6 +85,17 @@ app.post('/api/login', (req, res) => {
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
+app.post('/api/delete', (req, res) => {
+    const { idx } = req.body;
+    const movies = readData();
+    if (typeof idx === 'number' && idx >= 0 && idx < movies.length) {
+        movies.splice(idx, 1);
+        writeData(movies);
+        res.json({ message: 'Deleted' });
+    } else {
+        res.status(400).json({ error: 'Invalid index' });
+    }
+});
 
 app.get('/api/login', (req, res) => {
   res.send("Login API only accepts POST requests 🔐");
